@@ -1,0 +1,102 @@
+# Crear grupo
+az group create --name uaqCloud --location westus
+
+# Crear VM
+az vm create \
+  --resource-group uaqCloud \
+  --name my-vm \
+  --public-ip-sku Standard \
+  --image Ubuntu2204 \
+  --admin-username azureuser \
+  --generate-ssh-keys
+
+# Conectarse a VM
+ssh -i ~/.ssh/id_rsa azureuser@168.62.197.79
+
+# Version Linux
+cat /etc/os-release
+
+# Installar Docker
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Verificar que demon de docker está corriendo
+systemctl status docker
+
+# Crear carpeta llamada app
+mkdir app
+
+# Entrar a la carpeta
+cd app
+
+# Crear archivo llamado app
+touch app.py
+
+# Entrar al archivo
+nano app
+
+#Copiar y pegar dentro del archivo app
+from flask import Flask
+import os
+import socket
+
+app = Flask(__name__)
+@app.route("/")
+
+def hello():
+        html = "<h3>Hello {name}!</h3> <b>Hostname:</b> {hostname}<br/>"
+	return html.format(name=os.getenv("NAME", "word"), hostname = socket.gethostname())
+
+if __name__ == "__main__":
+        app.run(host='0.0.0.0', port=80)
+
+# Presionar las teclas siguientes para guardar y salir
+Ctrl + s
+Ctrl + x
+
+# Crear archivo llamado Dockerfile
+touch Dockerfile
+
+# Entrar al archivo
+nano Dockerfile
+
+#Copiar y pegar dentro del archivo Dockerfile
+From python:2.7-slim
+WORKDIR /app
+ADD . /app
+RUN pip install --trusted-host pypi.python.org Flask
+ENV NAME <su nombre>
+CMD ["python", "app.py"]
+
+# Presionar las teclas siguientes para guardar y salir
+Ctrl + s
+Ctrl + x
+
+# Creamos el contenedor
+sudo docker build -t uaqcloudcontainer .
+
+sudo docker run --name webapp -p 80:4000 uaqcloudcontainer
+
+sudo docker tag uaqcloudcontainer crostiperez/uaqcloudcontainer:<su nombre>
+
+sudo docker login
+
+sudo docker push crostiperez/uaqcloudcontainer:<su nombre>
+
+
+######## Importante, borrar recursos #########################
+
+az group delete --name uaqCloud
