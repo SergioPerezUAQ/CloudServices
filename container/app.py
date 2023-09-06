@@ -1,13 +1,15 @@
 from flask import Flask
+from datetime import datetime
+import re
 import os
 import socket
 
 app = Flask(__name__)
-@app.route("/")
 
+@app.route("/")
 def hello():
-        html = "<h3>Hello {name}!</h3> <b>Hostname:</b> {hostname}<br/>"
-	return html.format(name=os.getenv("NAME", "word"), hostname = socket.gethostname())
+    html = "<h3>Hello {name}!</h3> <b>Hostname:</b> {hostname}<br/>"
+    return html.format(name=os.getenv("NAME", "word"), hostname = socket.gethostname())
 
 @app.route("/hello/<name1>")
 def hello_there(name1):
@@ -27,4 +29,4 @@ def hello_there(name1):
     return content
 
 if __name__ == "__main__":
-        app.run(host='0.0.0.0', port=4000)
+        app.run(host='0.0.0.0', port=80)
