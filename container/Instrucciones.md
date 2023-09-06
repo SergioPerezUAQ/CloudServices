@@ -57,6 +57,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 ```Shell
 systemctl status docker
 ```
+* Para salir del comando, presionar dos veces Ctrl + C 
 
 ## Crear carpeta llamada app
 ```Shell
@@ -142,6 +143,11 @@ Ctrl + S
 
 Ctrl + X
 
+## Crear repositorio en Docker Hub
+![Primer paso](./images/docker1.png)
+![Segundo paso](./images/docker2.png)
+![Tercer paso](./images/docker3.png)
+
 ## Creamos el contenedor
 ```Shell
 sudo docker build -t uaqcloudcontainer .
@@ -154,7 +160,7 @@ sudo docker run --name webapp -p 80:80 uaqcloudcontainer
 
 ## Agregamos una etiqueta al contenedor
 ```Shell
-sudo docker tag uaqcloudcontainer crostiperez/uaqcloudcontainer:<su nombre>
+sudo docker tag uaqcloudcontainer <su usuario docker>/uaqcloudcontainer:<su nombre>
 ```
 
 ## Iniciamos sesion en Docker Hub
@@ -164,7 +170,11 @@ sudo docker login
 
 ## Pusheamos el contenedor a un repositorio público
 ```Shell
-sudo docker push crostiperez/uaqcloudcontainer:<su nombre>
+sudo docker push <su usuario docker>/uaqcloudcontainer:<su nombre>
+```
+## Al terminar de hacer push salir, tienes que salir de la máquina virtual con el siguiente comando
+```Shell
+exit
 ```
 
 # Importante, borrar recursos al finalizar la práctica
