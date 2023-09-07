@@ -76,7 +76,7 @@ touch app.py
 
 ## Entrar al archivo
 ```Shell
-nano app
+nano app.py
 ```
 
 ## Copiar y pegar dentro del archivo app
