@@ -82,6 +82,7 @@ nano app.py
 ## Copiar y pegar dentro del archivo app
 ```Python
 from flask import Flask
+from datetime import datetime
 import os
 import socket
 
@@ -176,6 +177,18 @@ sudo docker push <su usuario docker>/uaqcloudcontainer:<su nombre>
 ```Shell
 exit
 ```
+
+## Creamos un plan de appservice
+```Shell
+az appservice plan create --name MyPlan --resource-group uaqCloud --sku B1 --is-linux
+```
+
+## Creamos un appservice con el contenedor que subimos a DockerHub
+```Shell
+az webapp create --resource-group uaqCloud --plan MyPlan --name mywebappuaqcloud --deployment-container-image-name <su usuario docker>/uaqcloudcontainer:<su nombre>
+```
+## En el navegador entrar a la url generada
+Ejemplo: http://mywebappuaqcloud.azurewebsites.net/
 
 # Importante, borrar recursos al finalizar la práctica
 
